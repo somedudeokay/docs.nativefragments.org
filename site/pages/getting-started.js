@@ -8,6 +8,12 @@ export const gettingStartedPage = () =>
     intro:
       "The recommended starting point is the npm create command. It creates an edge-ready Cloudflare Worker app with routes, a shell, browser helpers, and one Shadow DOM component.",
     body: html`
+      <h2>Prerequisites</h2>
+      <p>
+        You need Node.js, npm, and a Cloudflare account to deploy. The generated
+        app uses Wrangler, so run <code>npx wrangler login</code> before your
+        first deploy if this machine is not already authenticated.
+      </p>
       <h2>Create</h2>
       ${code(
         `npm create @nativefragments/app@latest my-app

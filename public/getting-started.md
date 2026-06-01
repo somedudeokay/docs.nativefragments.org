@@ -2,6 +2,12 @@
 
 > Create and run a Native Fragments app. For the full docs index, fetch https://docs.nativefragments.org/llms.txt.
 
+## Prerequisites
+
+You need Node.js, npm, and a Cloudflare account to deploy. The generated app uses Wrangler, so run `npx wrangler login` before your first deploy if this machine is not already authenticated.
+
+## Create
+
 ```sh
 npm create @nativefragments/app@latest my-app
 cd my-app
@@ -11,6 +17,12 @@ npm run dev
 The scaffold includes a Cloudflare Worker entry, a Hono API adapter under `/api/*`, a route manifest, a shell, app pages, browser fragment navigation, nested fragment slots, Shadow DOM component helpers, optional signals, and worker RPC helpers.
 
 Native Fragments is designed to deploy to Cloudflare Workers first. The Worker renders full pages, partial rerenders, and API routes at the edge close to users.
+
+Deploy with:
+
+```sh
+npm run deploy
+```
 
 ## Package Imports
 
