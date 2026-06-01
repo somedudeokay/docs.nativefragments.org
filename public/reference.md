@@ -121,6 +121,25 @@ Properties:
 - `{string} [description] Meta description.`
 - `{string} [canonical] Canonical URL.`
 
+### FragmentRenderer
+
+Type: `(context: RouteContext) => string | Promise<string>`
+
+
+
+### FragmentDefinition
+
+Type: `object`
+
+
+
+Properties:
+
+- `{string} name Fragment slot name.`
+- `{FragmentRenderer} render Fragment renderer.`
+- `{(attributes?: import("./html.js").HtmlAttrs) => import("./html.js").RawHtml} attrs Attributes for links and target containers using this fragment slot.`
+- `{(mode?: "intent" | "visible" | "load" | "none", attributes?: import("./html.js").HtmlAttrs) => import("./html.js").RawHtml} prefetchAttrs Attributes for links using this fragment slot with a prefetch mode.`
+
 ### RouteDefinition
 
 Type: `object`
@@ -131,13 +150,24 @@ Properties:
 
 - `{(context: RouteContext) => RouteMeta | Promise<RouteMeta>} [meta] Function that returns metadata for the route.`
 - `{(context: RouteContext) => string | Promise<string>} render Function that renders route body HTML.`
-- `{Record<string, (context: RouteContext) => string | Promise<string>>} [fragments] Named fragment renderers used by nested fragment slots.`
+- `{Record<string, FragmentRenderer> | FragmentDefinition[]} [fragments] Named fragment renderers used by nested fragment slots.`
 
 ### Route
 
 Type: `RouteDefinition & { path: string }`
 
 
+
+### fragment
+
+Create a named fragment definition. Use this when a route has a nested region with its own navigation. The returned object can be registered in `route(..., { fragments: [item] })` and its attributes can be reused on links and target containers.
+
+Parameters:
+
+- `{string} name Fragment slot name.`
+- `{FragmentRenderer} render Fragment renderer.`
+
+Returns: `{FragmentDefinition} Fragment definition.`
 
 ### route
 
@@ -224,6 +254,7 @@ Properties:
 - `{string} [apiPrefix="/api"] URL prefix handled by `api`.`
 - `{Route} [notFound] Optional 404 route.`
 - `{string} [assetsBinding="ASSETS"] Cloudflare assets binding name.`
+- `{boolean} [fragmentManifest=true] Whether to inject a declarative fragment manifest with Cloudflare `HTMLRewriter` when available.`
 
 ### createCloudflareHandler
 
@@ -251,7 +282,19 @@ Properties:
 
 - `{string} [slot="#content-slot"] Selector for the element replaced by fragment responses.`
 - `{number} [ttl=30000] Fragment cache time in milliseconds.`
+- `{boolean | "none" | "intent" | "visible" | "load"} [prefetch="intent"] Default fragment prefetch behavior. Links can override this with `data-fragment-prefetch="intent|visible|load|none"`.`
 - `{(event: { meta: object | null, url: URL, slot: string }) => void} [afterNavigate] Callback fired after a successful client-side navigation.`
+
+### prefetchFragment
+
+Prefetch a same-origin fragment into the shared fragment cache.
+
+Parameters:
+
+- `{string | URL} href URL to prefetch.`
+- `{{ slot?: string, ttl?: number, signal?: AbortSignal }} [options={}] Prefetch options.`
+
+Returns: `{Promise<string | null>} Prefetched fragment HTML, or `null` for skipped cross-origin URLs.`
 
 ### installFragmentNavigation
 

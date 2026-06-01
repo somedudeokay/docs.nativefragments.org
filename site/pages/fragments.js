@@ -12,6 +12,7 @@ export const fragmentsPage = () =>
       ${code(`import { installFragmentNavigation } from "/nativefragments/router.js";
 
 installFragmentNavigation({
+  prefetch: "intent",
   afterNavigate({ meta, url }) {
     console.log(meta.title, url.pathname);
   }
@@ -27,12 +28,28 @@ installFragmentNavigation({
         Add <code>data-fragment-slot</code> to a link and target container when
         only one region should update.
       </p>
-      ${code(`<a href="/settings/profile" data-fragment-slot="settings-panel">
+      ${code(`<a href="/settings/profile" data-fragment-slot="settings-panel" data-fragment-prefetch="intent">
   Profile
 </a>
 
 <section data-fragment-slot="settings-panel">
   ...
 </section>`)}
+      <h2>Prefetch</h2>
+      <p>
+        Same-origin fragments are prefetched on hover and focus by default.
+        Use declarative attributes for links that should prefetch when visible,
+        immediately on page load, or never.
+      </p>
+      ${code(`<a href="/reports" data-fragment-prefetch="visible">Reports</a>
+<a href="/settings" data-fragment-prefetch="load">Settings</a>
+<a href="/logout" data-fragment-prefetch="none">Log out</a>`)}
+      <h2>Declarative manifest</h2>
+      <p>
+        On Cloudflare, the Worker can use <code>HTMLRewriter</code> to detect
+        fragment slots and prefetch links in the rendered markup, then append a
+        <code>data-fragment-manifest</code> JSON script for the browser router
+        and agents to inspect.
+      </p>
     `,
   });

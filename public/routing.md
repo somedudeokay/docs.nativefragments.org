@@ -22,11 +22,13 @@ Routes are matched by normalized path. A normal document request renders the ful
 ## Nested Route Regions
 
 ```js
+import { fragment, route } from "@nativefragments/core/server";
+
+const profile = fragment("settings-panel", profilePanel);
+
 route("/settings/profile", {
   render: settingsPage,
-  fragments: {
-    "settings-panel": profilePanel,
-  },
+  fragments: [profile],
 });
 ```
 

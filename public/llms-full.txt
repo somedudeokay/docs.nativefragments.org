@@ -51,6 +51,20 @@ import { shadow, sheet } from "/nativefragments/component.js";
 import { createWorkerClient } from "/nativefragments/worker.js";
 ```
 
+Fragment helpers:
+
+```js
+import { fragment } from "@nativefragments/core/server";
+const panel = fragment("settings-panel", renderPanel);
+```
+
+Fragment prefetch:
+
+```html
+<a href="/reports" data-fragment-prefetch="visible">Reports</a>
+<a href="/settings" data-fragment-prefetch="load">Settings</a>
+```
+
 ## Optional Signals Package
 
 ```sh

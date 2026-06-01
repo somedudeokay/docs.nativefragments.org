@@ -115,12 +115,29 @@ export const apiSections = [
         "type": "object"
       },
       {
+        "name": "FragmentRenderer",
+        "description": "",
+        "properties": [],
+        "type": "(context: RouteContext) => string | Promise<string>"
+      },
+      {
+        "name": "FragmentDefinition",
+        "description": "",
+        "properties": [
+          "{string} name Fragment slot name.",
+          "{FragmentRenderer} render Fragment renderer.",
+          "{(attributes?: import(\"./html.js\").HtmlAttrs) => import(\"./html.js\").RawHtml} attrs Attributes for links and target containers using this fragment slot.",
+          "{(mode?: \"intent\" | \"visible\" | \"load\" | \"none\", attributes?: import(\"./html.js\").HtmlAttrs) => import(\"./html.js\").RawHtml} prefetchAttrs Attributes for links using this fragment slot with a prefetch mode."
+        ],
+        "type": "object"
+      },
+      {
         "name": "RouteDefinition",
         "description": "",
         "properties": [
           "{(context: RouteContext) => RouteMeta | Promise<RouteMeta>} [meta] Function that returns metadata for the route.",
           "{(context: RouteContext) => string | Promise<string>} render Function that renders route body HTML.",
-          "{Record<string, (context: RouteContext) => string | Promise<string>>} [fragments] Named fragment renderers used by nested fragment slots."
+          "{Record<string, FragmentRenderer> | FragmentDefinition[]} [fragments] Named fragment renderers used by nested fragment slots."
         ],
         "type": "object"
       },
@@ -132,6 +149,17 @@ export const apiSections = [
       }
     ],
     "symbols": [
+      {
+        "name": "fragment",
+        "description": "Create a named fragment definition. Use this when a route has a nested region with its own navigation. The returned object can be registered in `route(..., { fragments: [item] })` and its attributes can be reused on links and target containers.",
+        "params": [
+          "{string} name Fragment slot name.",
+          "{FragmentRenderer} render Fragment renderer."
+        ],
+        "properties": [],
+        "returns": "{FragmentDefinition} Fragment definition.",
+        "type": ""
+      },
       {
         "name": "route",
         "description": "Create a normalized route definition.",
@@ -213,7 +241,8 @@ export const apiSections = [
           "{{ fetch(request: Request, env: Record<string, unknown>, context?: unknown): Promise<Response> | Response }} [api] Optional Web Standards API router. Hono apps work here because they expose a compatible `fetch` method.",
           "{string} [apiPrefix=\"/api\"] URL prefix handled by `api`.",
           "{Route} [notFound] Optional 404 route.",
-          "{string} [assetsBinding=\"ASSETS\"] Cloudflare assets binding name."
+          "{string} [assetsBinding=\"ASSETS\"] Cloudflare assets binding name.",
+          "{boolean} [fragmentManifest=true] Whether to inject a declarative fragment manifest with Cloudflare `HTMLRewriter` when available."
         ],
         "type": "object"
       }
@@ -242,12 +271,24 @@ export const apiSections = [
         "properties": [
           "{string} [slot=\"#content-slot\"] Selector for the element replaced by fragment responses.",
           "{number} [ttl=30000] Fragment cache time in milliseconds.",
+          "{boolean | \"none\" | \"intent\" | \"visible\" | \"load\"} [prefetch=\"intent\"] Default fragment prefetch behavior. Links can override this with `data-fragment-prefetch=\"intent|visible|load|none\"`.",
           "{(event: { meta: object | null, url: URL, slot: string }) => void} [afterNavigate] Callback fired after a successful client-side navigation."
         ],
         "type": "object"
       }
     ],
     "symbols": [
+      {
+        "name": "prefetchFragment",
+        "description": "Prefetch a same-origin fragment into the shared fragment cache.",
+        "params": [
+          "{string | URL} href URL to prefetch.",
+          "{{ slot?: string, ttl?: number, signal?: AbortSignal }} [options={}] Prefetch options."
+        ],
+        "properties": [],
+        "returns": "{Promise<string | null>} Prefetched fragment HTML, or `null` for skipped cross-origin URLs.",
+        "type": ""
+      },
       {
         "name": "installFragmentNavigation",
         "description": "Install same-origin fragment navigation. Clicked links are fetched with `x-fragment: true`, the configured content slot is replaced, document metadata is updated, and history state is pushed. Links with `data-fragment-slot=\"name\"` replace only the matching `[data-fragment-slot=\"name\"]` container and send `x-fragment-slot: name`. External links and modified clicks keep normal browser behavior.",

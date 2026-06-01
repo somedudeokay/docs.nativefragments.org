@@ -30,11 +30,13 @@ export const homeRoute = route("/", {
         renders a complete page, while fragment links can request only the
         named region.
       </p>
-      ${code(`route("/settings/profile", {
+      ${code(`import { fragment, html, route } from "@nativefragments/core/server";
+
+const profile = fragment("settings-panel", profilePanel);
+
+route("/settings/profile", {
   render: settingsPage,
-  fragments: {
-    "settings-panel": profilePanel
-  }
+  fragments: [profile]
 });`)}
     `,
   });
