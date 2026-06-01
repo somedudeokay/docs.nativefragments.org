@@ -20,7 +20,9 @@ const renderNav = (pathname) => html`${raw(
 )}`;
 
 export const shell = ({ body, meta }) => {
-  const pathname = new URL(meta.canonical).pathname;
+  const pathname = meta.canonical?.startsWith("http")
+    ? new URL(meta.canonical).pathname
+    : (meta.canonical ?? "/");
 
   return html`<!doctype html>
 <html lang="en">
