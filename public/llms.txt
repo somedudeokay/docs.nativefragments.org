@@ -8,6 +8,7 @@
 - [Introduction](https://docs.nativefragments.org/index.md)
 - [Getting Started](https://docs.nativefragments.org/getting-started.md)
 - [API Reference](https://docs.nativefragments.org/reference.md)
+- [AI Docs](https://docs.nativefragments.org/ai.md)
 
 ## Concepts
 

@@ -28,6 +28,7 @@ npm run dev
 - https://docs.nativefragments.org/workers.md
 - https://docs.nativefragments.org/signals.md
 - https://docs.nativefragments.org/agent-friendly.md
+- https://docs.nativefragments.org/ai.md
 - https://docs.nativefragments.org/reference.md
 
 ## Core Package

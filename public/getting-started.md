@@ -1,47 +1,46 @@
 # Getting Started
 
-> Create and run a Native Fragments app. For the full docs index, fetch https://docs.nativefragments.org/llms.txt.
+Create and run a Native Fragments app on Cloudflare Workers. The scaffold ships routes, a shell, browser helpers, and a Shadow DOM component.
 
 ## Prerequisites
 
-You need Node.js, npm, and a Cloudflare account to deploy. The generated app uses Wrangler, so run `npx wrangler login` before your first deploy if this machine is not already authenticated.
+Node.js and npm to develop; a Cloudflare account to deploy. The app runs on Wrangler — run `npx wrangler login` before your first deploy if this machine is not authenticated yet.
 
 ## Create
 
-```sh
+```shell
 npm create @nativefragments/app@latest my-app
 cd my-app
+npm install
 npm run dev
 ```
 
-The scaffold includes a Cloudflare Worker entry, a Hono API adapter under `/api/*`, a route manifest, a shell, app pages, browser fragment navigation, nested fragment slots, Shadow DOM component helpers, optional signals, and worker RPC helpers.
+`npm run dev` starts a local Worker and prints a URL.
 
-Native Fragments is designed to deploy to Cloudflare Workers first. The Worker renders full pages, partial rerenders, and API routes at the edge close to users.
+## Project structure
 
-Deploy with:
+```shell
+worker.js                     # Cloudflare entrypoint — createCloudflareHandler
+site/routes.js                # the route manifest
+site/shell.js                 # the full HTML document
+site/pages/home.js            # one renderer per route
+public/app/client.js          # installs fragment navigation
+public/app/components/         # Custom Elements
+public/nativefragments/        # browser helpers (router, component, worker)
+```
 
-```sh
+One route, one renderer, one component file — the layout stays obvious.
+
+## Deploy
+
+The Worker renders pages, fragments, and API routes at the edge.
+
+```shell
 npm run deploy
 ```
 
-## Package Imports
+## See also
 
-```js
-import { html, route } from "@nativefragments/core/server";
-import { createCloudflareHandler } from "@nativefragments/core/cloudflare";
-```
-
-Browser helpers are served from app-owned files:
-
-```js
-import { installFragmentNavigation } from "/nativefragments/router.js";
-import { shadow, sheet } from "/nativefragments/component.js";
-import { createWorkerClient } from "/nativefragments/worker.js";
-```
-
-Optional signals:
-
-```sh
-npm i @nativefragments/signals
-cp node_modules/@nativefragments/signals/public/nativefragments/*.js public/nativefragments/
-```
+- [Routing](/concepts/routing) — structure your URLs.
+- [Fragments](/concepts/fragments) — fast partial navigation.
+- [Components](/concepts/components) — build UI with Shadow DOM.
