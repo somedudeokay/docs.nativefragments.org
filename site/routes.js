@@ -79,8 +79,8 @@ export const routes = [
     meta: () =>
       meta(
         "/concepts/signals",
-        "Signals",
-        "Optional signal-based reactive state for Native Fragments apps.",
+        "State",
+        "Optional reactive state for Native Fragments apps, based on the TC39 Signals proposal.",
       ),
     render: signalsPage,
   }),
