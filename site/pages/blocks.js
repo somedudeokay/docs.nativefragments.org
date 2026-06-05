@@ -1,5 +1,6 @@
 import { html, raw } from "@nativefragments/core/server";
 import { codeBlock } from "../code.js";
+import { withHeadingIds } from "../headings.js";
 
 export const code = (source, language = "js") => codeBlock(source, language);
 
@@ -7,7 +8,7 @@ export const docPage = ({ eyebrow, title, intro, body }) => html`<article class=
   <p class="eyebrow">${eyebrow}</p>
   <h1>${title}</h1>
   <p class="intro">${intro}</p>
-  ${raw(body)}
+  ${raw(withHeadingIds(body))}
 </article>`;
 
 export const callout = (title, text) =>

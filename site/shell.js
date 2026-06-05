@@ -68,9 +68,16 @@ export const shell = ({ body, meta }) => {
     </p>
     ${siteHeader()}
     <div class="layout">
-      <aside class="sidebar">${raw(renderNav(pathname))}</aside>
+      <aside class="sidebar">
+        <button type="button" class="search-trigger" data-search-trigger aria-label="Search documentation">
+          <span class="search-trigger-label">Search the docs…</span>
+          <kbd class="search-trigger-key">⌘K</kbd>
+        </button>
+        ${raw(renderNav(pathname))}
+      </aside>
       <main id="content-slot">${raw(body)}</main>
     </div>
+    <docs-search></docs-search>
   </body>
 </html>`;
 };
