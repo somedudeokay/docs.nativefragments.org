@@ -159,8 +159,38 @@ const seeAlsoLine = (name) =>
         .join(" · ")}</p>`
     : "";
 
+// A symbol/type title that links to its exact source line on GitHub.
+const symbolLink = (name, source) =>
+  source
+    ? `<a class="api-ghlink" href="${source}" target="_blank" rel="noopener">${name}</a>`
+    : name;
+
+// One-line description per module, shown under each section heading.
+const moduleInfo = {
+  "Server HTML":
+    "Tagged-template HTML rendering that escapes by default, with helpers for attributes, JSON, and declarative Shadow DOM.",
+  "Server Routing":
+    "Define routes, match requests, and render full pages or individual named fragments.",
+  "Cloudflare Adapter":
+    "Turn a route manifest into a Cloudflare Worker that serves pages, fragments, static assets, and API routes.",
+  "Browser Router":
+    "Upgrade same-origin links into fragment navigations, with prefetching and metadata updates.",
+  "Shadow DOM Components":
+    "Attach scoped Shadow DOM and adopt constructable stylesheets inside Custom Elements.",
+  "Web Workers":
+    "A tiny RPC layer over Web Workers for moving expensive work off the main thread.",
+};
+
+const sectionIntro = (section) => {
+  const desc = moduleInfo[section.title] ?? "";
+  const link = section.source
+    ? `<a class="api-source" href="${section.source}" target="_blank" rel="noopener">Source &#8599;</a>`
+    : "";
+  return desc || link ? `<p class="api-section-desc">${desc} ${link}</p>` : "";
+};
+
 const renderSymbol = (symbol) => `<article class="api-symbol">
-  <h3 id="${symbol.name}">${symbol.name}</h3>
+  <h3 id="${symbol.name}">${symbolLink(symbol.name, symbol.source)}</h3>
   <pre class="api-sig"><code>${escapeHtml(symbol.signature)}</code></pre>
   ${symbol.description ? `<p>${inline(symbol.description)}</p>` : ""}
   ${symbol.type ? `<p class="api-meta"><span>Type</span> <code>${escapeHtml(symbol.type)}</code></p>` : ""}
@@ -177,7 +207,7 @@ const renderSymbol = (symbol) => `<article class="api-symbol">
 </article>`;
 
 const renderType = (type) => `<article class="api-symbol type-symbol">
-  <h3 id="${type.name}">${type.name}</h3>
+  <h3 id="${type.name}">${symbolLink(type.name, type.source)}</h3>
   <pre class="api-sig"><code>${escapeHtml(type.type)}</code></pre>
   ${type.description ? `<p>${inline(type.description)}</p>` : ""}
   ${paramsTable(type.properties)}
@@ -195,6 +225,7 @@ export const referencePage = () =>
           (section) => `<section class="api-section">
             <p class="module">${section.module}</p>
             <h2>${section.title}</h2>
+            ${sectionIntro(section)}
             ${section.types.map(renderType).join("")}
             ${section.symbols.map(renderSymbol).join("")}
           </section>`,

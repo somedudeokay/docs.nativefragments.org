@@ -190,6 +190,7 @@ const findExports = (source) => {
     exports.push({
       name: match[1],
       signature: buildSignature(match[1], parsed),
+      line: beforeExport.split("\n").length,
       ...parsed,
     });
   }
@@ -204,7 +205,10 @@ const findTypedefs = (source) => {
 
   while ((match = pattern.exec(source)) !== null) {
     const typedef = parseTypedef(match[1]);
-    if (typedef) typedefs.push(typedef);
+    if (typedef) {
+      typedef.line = source.slice(0, match.index).split("\n").length;
+      typedefs.push(typedef);
+    }
   }
 
   return typedefs;
@@ -267,15 +271,33 @@ ${symbol.type ? `\nType: \`${symbol.type}\`\n` : ""}${mdParamTable(symbol.params
   .join("\n")}
 `;
 
+const REPO = "https://github.com/somedudeokay/nativefragments";
+
 const main = async () => {
+  // Pin source links to the exact published version the docs are generated from,
+  // so line numbers always match.
+  const { version } = JSON.parse(
+    await readFile(path.join(coreRoot, "package.json"), "utf8"),
+  );
+  const ref = `v${version}`;
+  const blob = (file, line) =>
+    `${REPO}/blob/${ref}/${file}${line ? `#L${line}` : ""}`;
+
   const sections = [];
 
   for (const source of sources) {
     const code = await readFile(path.join(coreRoot, source.file), "utf8");
     sections.push({
       ...source,
-      types: findTypedefs(code),
-      symbols: findExports(code),
+      source: blob(source.file),
+      types: findTypedefs(code).map((type) => ({
+        ...type,
+        source: blob(source.file, type.line),
+      })),
+      symbols: findExports(code).map((symbol) => ({
+        ...symbol,
+        source: blob(source.file, symbol.line),
+      })),
     });
   }
 
