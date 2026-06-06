@@ -3,9 +3,6 @@ import { criticalStyles } from "./critical-styles.js";
 import { siteHeader } from "./header.js";
 import { navGroups } from "./nav.js";
 
-const fontHref =
-  "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Space+Grotesk:wght@500;600;700&display=swap";
-
 const renderNav = (pathname) => html`${raw(
   navGroups
     .map(
@@ -42,9 +39,11 @@ export const shell = ({ body, meta }) => {
       document.documentElement.classList.add("js");
     </script>
     <style>${raw(criticalStyles)}</style>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="${fontHref}" />
+    <link rel="preload" href="/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/geist-500.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/geist-600.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/space-grotesk-700.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jetbrains-mono-500.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/app/styles.css" />
     <script type="module" src="/app/client.js"></script>
   </head>
