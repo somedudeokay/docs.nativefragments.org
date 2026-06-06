@@ -44,20 +44,8 @@ export const shell = ({ body, meta }) => {
     <style>${raw(criticalStyles)}</style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="preload"
-      href="${fontHref}"
-      as="style"
-      onload="this.onload=null;this.rel='stylesheet'"
-    />
-    <noscript><link rel="stylesheet" href="${fontHref}" /></noscript>
-    <link
-      rel="preload"
-      href="/app/styles.css"
-      as="style"
-      onload="this.onload=null;this.rel='stylesheet'"
-    />
-    <noscript><link rel="stylesheet" href="/app/styles.css" /></noscript>
+    <link rel="stylesheet" href="${fontHref}" />
+    <link rel="stylesheet" href="/app/styles.css" />
     <script type="module" src="/app/client.js"></script>
   </head>
   <body>
